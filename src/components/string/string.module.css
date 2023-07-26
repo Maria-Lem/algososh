@@ -1,0 +1,14 @@
+.inputContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 0 auto 120px;
+  max-width: 522px;
+}
+
+.letters {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  gap: 16px;
+}
