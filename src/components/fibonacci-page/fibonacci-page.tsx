@@ -12,7 +12,8 @@ export const FibonacciPage: React.FC = () => {
   const [sequence, setSequence] = useState<number[]>([]);
 
   const fibonacciSequence = (n: number): number[] => {
-    let arr: number[] = [1, 1];
+    let arr: number[] = [];
+    let prev: number = 1;
 
     // let i = 0;
 
@@ -27,10 +28,18 @@ export const FibonacciPage: React.FC = () => {
     //   return arr;
     // }, i * 500);
 
-    for (let i = 2; i < n + 1; i++) {
+    for (let i = 0; i < n + 1; i++) {
       setTimeout(() => {
-        arr.push(arr[i - 1] + arr[i - 2]);
-        setSequence([...arr]);
+        if (i === 0) {
+          arr.push(1);
+          setSequence([...arr]);
+        } else if (i === 1) {
+          arr.push(1);
+          setSequence([...arr]);
+        } else {
+          arr.push(arr[i - 1] + arr[i - 2]);
+          setSequence([...arr]);
+        }
       }, i * 500);
     }
     return arr;
