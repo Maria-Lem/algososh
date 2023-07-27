@@ -66,7 +66,6 @@ export const StringComponent: React.FC = () => {
   }
 
   const handleClick = () => {
-    console.log('hi');
     setIsLoader(true);
 
     let start = 0;
@@ -79,8 +78,6 @@ export const StringComponent: React.FC = () => {
         start++;
         end--;
         time += 1000;
-        console.log('time: ', time);
-
       }
     }, 100);
   };
