@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+
+.selectionRadio {
+  margin-right: 40px;
+}
+
+.bubbleRadio {
+  margin-right: 52px;
+}
+
+.ascendingBtn {
+  margin-right: 12px;
+}
+
+.descendingBtn {
+  margin-right: 80px;
+}
+
+.ascendingBtn, .descendingBtn {
+  width: 205px;
+}
+
+.chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.column {
+  margin-right: 10px;
+}
+
+.column:last-child {
+  margin-right: 0;
+}
