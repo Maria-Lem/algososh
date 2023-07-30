@@ -11,7 +11,7 @@ export class Stack<T> implements IStack<T> {
     this.container.pop();
   };
 
-  peak = (): T | null => {
+  peek = (): T | null => {
     if (this.container.length > 0) {
       return this.container[this.container.length - 1];
     }

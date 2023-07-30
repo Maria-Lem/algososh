@@ -10,8 +10,8 @@ import { Column } from "../ui/column/column";
 import { Direction } from "../../types/direction";
 import { Algorithm } from "../../types/algorithm";
 import { ElementStates } from "../../types/element-states";
-import { delay } from "../../utils/utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { delay } from "../../utils/utils";
 
 interface IRandomArray {
   num: number;

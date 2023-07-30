@@ -1,0 +1,29 @@
+.formContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0 auto 48px;
+  max-width: 830px;
+}
+
+.addBtn {
+  margin-right: 12px;
+}
+
+.deleteBtn {
+  margin-right: 80px;
+}
+
+.queueContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.queueElement {
+  margin-right: 16px;
+}
+
+.queueElement:last-child {
+  margin-right: 0;
+}

@@ -5,21 +5,17 @@ import styles from './stack-page.module.css';
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
-import { Stack } from "./stack-class";
+import { Circle } from "../ui/circle/circle";
+
 import { ElementStates } from "../../types/element-states";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { delay } from "../../utils/utils";
-import { Circle } from "../ui/circle/circle";
+import { Stack } from "./stack-class";
+import { IIsLoader } from "../../types/main";
 
 interface IStackElement {
   item: string;
-  state: ElementStates | null;
-}
-
-interface IIsLoader {
-  isAdding: boolean;
-  isDeleting: boolean;
-  isClearing: boolean;
+  state: ElementStates;
 }
 
 export const StackPage: React.FC = () => {
@@ -44,14 +40,14 @@ export const StackPage: React.FC = () => {
     setStackArray([...stack.getElements()]);
     await delay(SHORT_DELAY_IN_MS);
 
-    stack.peak()!.state = ElementStates.Default;
+    stack.peek()!.state = ElementStates.Default;
     setStackArray([...stack.getElements()]);
     setIsLoader((prevState) => ({ ...prevState, isAdding: false}));
   };
 
   const deleteFromStack = async () => {
     setIsLoader((prevState) => ({ ...prevState, isDeleting: true, }));
-    stack.peak()!.state = ElementStates.Changing;
+    stack.peek()!.state = ElementStates.Changing;
     setStackArray([...stack.getElements()]);
     await delay(SHORT_DELAY_IN_MS);
 
