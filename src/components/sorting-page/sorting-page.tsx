@@ -10,6 +10,8 @@ import { Column } from "../ui/column/column";
 import { Direction } from "../../types/direction";
 import { Algorithm } from "../../types/algorithm";
 import { ElementStates } from "../../types/element-states";
+import { delay } from "../../utils/utils";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 interface IRandomArray {
   num: number;
@@ -55,8 +57,6 @@ export const SortingPage: React.FC = () => {
     return arr;
   };
 
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
   const swap = (arr: IRandomArray[], firstIndex: number, secondIndex: number) => {
     let temp = arr[firstIndex];
     arr[firstIndex] = arr[secondIndex];
@@ -74,8 +74,7 @@ export const SortingPage: React.FC = () => {
         arr[j].sorting = ElementStates.Changing;
         setRandomArray([...arr]);
 
-        await delay(500);
-
+        await delay(SHORT_DELAY_IN_MS);
 
         if (minSort) {
           if (arr[j].num > arr[index].num) {
