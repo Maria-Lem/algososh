@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from './queue-page.module.css';
 
@@ -6,16 +6,27 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
+
 import { ElementStates } from "../../types/element-states";
 import { IQueueElement } from "../../types/queue";
-import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import { delay } from "../../utils/utils";
-import { Queue } from "./queue-class";
 import { IIsLoader } from "../../types/main";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+
+import { Queue } from "./queue-class";
+
+import { delay } from "../../utils/utils";
+import { useForm } from "../../utils/hooks/useForm";
+// import { useIsLoader } from "../../utils/hooks/useIsLoader";
 
 export const QueuePage: React.FC = () => {
   const [queue] = useState(new Queue<IQueueElement>(7));
-  const [input, setInput] = useState('');
+  const { form, handleChange, setForm } = useForm({ input: '' });
+  // const { isLoader, handleIsLoader, setIsLoader } = useIsLoader({
+  //   isAdding: false, 
+  //   isDeleting: false,
+  //   isClearing: false,
+  // });
+  // console.log('isLoader: ', isLoader);
   const [queueArray, setQueueArray] = useState<IQueueElement[]>([]);
   const [isLoader, setIsLoader] = useState<IIsLoader>({ 
     isAdding: false, 
@@ -28,38 +39,34 @@ export const QueuePage: React.FC = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  };
-
   const addToQueue = async () => {
-    setIsLoader((prevState) => ({ ...prevState, isAdding: true}));
-    queue.enqueue({ item: input, state: ElementStates.Changing });
-    setInput('');
+    setIsLoader({ ...isLoader, isAdding: true});
+    queue.enqueue({ item: form.input, state: ElementStates.Changing });
+    setForm({ ...form, input: '' });
     setQueueArray([...queue.getElements()]);
 
     await delay(SHORT_DELAY_IN_MS);
     queue.getElements()[queue.getTail() - 1].state = ElementStates.Default;
     setQueueArray([...queue.getElements()]);
-    setIsLoader((prevState) => ({ ...prevState, isAdding: false}));
+    setIsLoader({ ...isLoader, isAdding: false});
   };
 
   const deleteFromQueue = async () => {
-    setIsLoader((prevState) => ({ ...prevState, isDeleting: true, }));
+    setIsLoader({ ...isLoader, isDeleting: true, });
     queue.getElements()[queue.getHead()].state = ElementStates.Changing;
     setQueueArray([...queue.getElements()]);
-    await delay(SHORT_DELAY_IN_MS);
 
+    await delay(SHORT_DELAY_IN_MS);
     queue.dequeue();
     setQueueArray([...queue.getElements()]);
-    setIsLoader((prevState) => ({ ...prevState, isDeleting: false}));
+    setIsLoader({ ...isLoader, isDeleting: false});
   };
 
   const clearQueue = () => {
-    setIsLoader((prevState) => ({ ...prevState, isClearing: true}));
+    setIsLoader({ ...isLoader, isClearing: true});
     queue.clear();
     setQueueArray([...queue.getElements()]);
-    setIsLoader((prevState) => ({ ...prevState, isClearing: false}));
+    setIsLoader({ ...isLoader, isClearing: false});
   };
 
   const queueElement = queueArray.map((item, i) => (
@@ -80,13 +87,14 @@ export const QueuePage: React.FC = () => {
         <Input 
           isLimitText={true}
           maxLength={4}
-          value={input}
+          name="input"
+          value={form.input}
           onChange={handleChange}
         />
         <Button 
           text="Добавить"
           onClick={addToQueue}
-          disabled={input.length === 0}
+          disabled={queue.getTail() === queue.getSize() || form.input.length === 0}
           isLoader={isLoader.isAdding}
           extraClass={styles.addBtn}
         />

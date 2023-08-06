@@ -21,6 +21,12 @@ export class Queue<T> implements IQueue<T> {
   enqueue = (item: T): void => {
     if (this.length >= this.size) return;
 
+    if (this.isEmpty()) {
+      this.head = 0;
+      this.tail = 0;
+      this.length = 0;
+    }
+
     if (this.length < this.size) {
       this.container[this.tail % this.size] = item;
       this.tail++;

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 
 import styles from './string.module.css';
 
@@ -8,45 +8,34 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 
 import { ElementStates } from "../../types/element-states";
+import { IResultArray } from "../../types/main";
+import { DELAY_IN_MS } from "../../constants/delays";
 
-interface IResultArray {
-  letter: string;
-  sorting: string;
-}
+import { useForm } from "../../utils/hooks/useForm";
+import { swap } from "../../utils/utils";
 
 export const StringComponent: React.FC = () => {
-  const [input, setInput] = useState('');
+  const { form, handleChange, setForm } = useForm({ input: '' });
   const [stringToReverse, setStringToReverse] = useState<IResultArray[]>([]);
   const [isLoader, setIsLoader] = useState(false);
 
-  const inputArray = input.split('');
+  const inputArray = form.input.split('');
   const resultArray: IResultArray[] = [];
 
   inputArray.forEach(elem => {
       const letter = {
-        letter: elem,
-        sorting: ElementStates.Default,
+        value: elem,
+        state: ElementStates.Default,
       };
 
       resultArray.push(letter);
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-    // setStringToReverse([...resultArray]);
-  };
-
-  const swap = (inputArray: IResultArray[], firstIndex: number, secondIndex: number) => {
-    let temp = inputArray[firstIndex];
-    inputArray[firstIndex] = inputArray[secondIndex];
-    inputArray[secondIndex] = temp;
-  };
-
   const reverseString = (inputArray: IResultArray[], start: number, end: number, time: number) => {
 
     setTimeout(() => {
-      inputArray[start].sorting = ElementStates.Changing;
-      inputArray[end].sorting = ElementStates.Changing;
+      inputArray[start].state = ElementStates.Changing;
+      inputArray[end].state = ElementStates.Changing;
 
       setStringToReverse([...inputArray]);
     }, time);
@@ -54,12 +43,13 @@ export const StringComponent: React.FC = () => {
     setTimeout(() => {
       swap(inputArray, start, end);
 
-      inputArray[start].sorting = ElementStates.Modified;
-      inputArray[end].sorting = ElementStates.Modified;
+      inputArray[start].state = ElementStates.Modified;
+      inputArray[end].state = ElementStates.Modified;
 
       setStringToReverse([...inputArray]);
 
       if (start + 1 === end || start >= end) {
+        setForm({ ...form, input: '' });
         setIsLoader(false);
       }
     }, time + 1000);
@@ -71,7 +61,7 @@ export const StringComponent: React.FC = () => {
 
     let start = 0;
     let end = inputArray.length - 1;
-    let time = 1000;
+    let time = DELAY_IN_MS;
 
     setTimeout(() => {
       while(start <= end) {
@@ -86,16 +76,22 @@ export const StringComponent: React.FC = () => {
   const letterElement = stringToReverse.map((letter, i) => (
     <Circle 
       key={i} 
-      letter={letter.letter} 
-      state={letter.sorting === ElementStates.Default ? ElementStates.Default : letter.sorting === ElementStates.Changing ? ElementStates.Changing : ElementStates.Modified}
+      letter={letter.value} 
+      state={letter.state === ElementStates.Default ? ElementStates.Default : letter.state === ElementStates.Changing ? ElementStates.Changing : ElementStates.Modified}
     ></Circle>
   ));
 
   return (
     <SolutionLayout title="Строка">
       <form className={styles.inputContainer}>
-        <Input isLimitText={true} maxLength={11} onChange={handleChange} />
-        <Button text="Развернуть" onClick={handleClick} disabled={input.length === 0 ? true : false} isLoader={isLoader} />
+        <Input 
+          isLimitText={true} 
+          maxLength={11} 
+          name="input"
+          value={form.input} 
+          onChange={handleChange} 
+        />
+        <Button text="Развернуть" onClick={handleClick} disabled={form.input.length === 0 ? true : false} isLoader={isLoader} />
       </form>
       <div className={styles.letters}>
         { letterElement }

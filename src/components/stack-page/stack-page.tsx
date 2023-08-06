@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 
 import styles from './stack-page.module.css';
 
@@ -8,10 +8,12 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 
 import { ElementStates } from "../../types/element-states";
-import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import { delay } from "../../utils/utils";
-import { Stack } from "./stack-class";
 import { IIsLoader } from "../../types/main";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { Stack } from "./stack-class";
+
+import { delay } from "../../utils/utils";
+import { useForm } from "../../utils/hooks/useForm";
 
 interface IStackElement {
   item: string;
@@ -20,7 +22,7 @@ interface IStackElement {
 
 export const StackPage: React.FC = () => {
   const [stack] = useState(new Stack<IStackElement>());
-  const [input, setInput] = useState<string>('');
+  const { form, handleChange, setForm } = useForm({ input: '' });
   const [stackArray, setStackArray] = useState<IStackElement[]>([]);
   const [isLoader, setIsLoader] = useState<IIsLoader>({ 
     isAdding: false, 
@@ -28,15 +30,10 @@ export const StackPage: React.FC = () => {
     isClearing: false,
   });
 
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  };
-
   const addToStack = async () => {
     setIsLoader((prevState) => ({ ...prevState, isAdding: true}));
-    stack.push({ item: input, state: ElementStates.Changing });
-    setInput('');
+    stack.push({ item: form.input, state: ElementStates.Changing });
+    setForm({ ...form, input: '' });
     setStackArray([...stack.getElements()]);
     await delay(SHORT_DELAY_IN_MS);
 
@@ -80,13 +77,14 @@ export const StackPage: React.FC = () => {
         <Input 
           isLimitText={true}
           maxLength={4}
-          value={input}
+          name="input"
+          value={form.input}
           onChange={handleChange}
         />
         <Button 
           text="Добавить"
           onClick={addToStack}
-          disabled={input.length === 0}
+          disabled={form.input.length === 0}
           isLoader={isLoader.isAdding}
           extraClass={styles.addBtn}
         />

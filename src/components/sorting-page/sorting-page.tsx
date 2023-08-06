@@ -10,18 +10,15 @@ import { Column } from "../ui/column/column";
 import { Direction } from "../../types/direction";
 import { Algorithm } from "../../types/algorithm";
 import { ElementStates } from "../../types/element-states";
+import { IRandomArray } from "../../types/main";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import { delay } from "../../utils/utils";
 
-interface IRandomArray {
-  num: number;
-  sorting: string;
-}
+import { delay, randomNumberBetweenRange, swap } from "../../utils/utils";
 
 export const SortingPage: React.FC = () => {
   const [algorithm, setAlgorithm] = useState<string>(Algorithm.SelectionSort);
   const [randomArray, setRandomArray] = useState<IRandomArray[]>([]);
-  const [isLoader, setIsLoader] = useState(false);
+  const [isLoader, setIsLoader] = useState<boolean>(false);
   const [direction, setDirection] = useState<Direction>(Direction.Ascending);
 
   useEffect(() => {
@@ -30,10 +27,6 @@ export const SortingPage: React.FC = () => {
   }, []);
 
   let resultArray: IRandomArray[] = []
-
-  const randomNumberBetweenRange = (min: number, max: number): number => {
-    return Math.floor(Math.random() * (max - min)) + min;
-  };
 
   const createNewRandomArray = () => {
     const length = randomNumberBetweenRange(3, 17);
@@ -45,8 +38,8 @@ export const SortingPage: React.FC = () => {
 
     arr.forEach(num => {
       const obj = {
-        num: num,
-        sorting: ElementStates.Default,
+        value: num,
+        state: ElementStates.Default,
       };
 
       resultArray.push(obj);
@@ -57,48 +50,42 @@ export const SortingPage: React.FC = () => {
     return arr;
   };
 
-  const swap = (arr: IRandomArray[], firstIndex: number, secondIndex: number) => {
-    let temp = arr[firstIndex];
-    arr[firstIndex] = arr[secondIndex];
-    arr[secondIndex] = temp;
-  };
-
   const selectionSort = async (arr: IRandomArray[], minSort = false, maxSort = false) => {
     const { length } = arr;
     
     for (let i = 0; i < length; i++) {
       let index = i;
-      arr[index].sorting = ElementStates.Changing;
+      arr[index].state = ElementStates.Changing;
 
       for (let j = i + 1; j < length; j++) {
-        arr[j].sorting = ElementStates.Changing;
+        arr[j].state = ElementStates.Changing;
         setRandomArray([...arr]);
 
         await delay(SHORT_DELAY_IN_MS);
 
         if (minSort) {
-          if (arr[j].num > arr[index].num) {
+          if (arr[j].value > arr[index].value) {
             index = j;
-            arr[j].sorting = ElementStates.Changing;
-            arr[index].sorting = i === index ? ElementStates.Changing : ElementStates.Default;
+            arr[j].state = ElementStates.Changing;
+            arr[index].state = i === index ? ElementStates.Changing : ElementStates.Default;
           }
         } else if (maxSort) {
-          if (arr[j].num < arr[index].num) {
+          if (arr[j].value < arr[index].value) {
             index = j;
-            arr[j].sorting = ElementStates.Changing;
-            arr[index].sorting = i === index ? ElementStates.Changing : ElementStates.Default;
+            arr[j].state = ElementStates.Changing;
+            arr[index].state = i === index ? ElementStates.Changing : ElementStates.Default;
           }
         }
         if (j !== index) {
-          arr[j].sorting = ElementStates.Default;
+          arr[j].state = ElementStates.Default;
         }
         setRandomArray([...arr])
       }
       if (index !== i) {
         swap(arr, i, index);
       } 
-      arr[i].sorting = ElementStates.Modified;
-      arr[index].sorting = ElementStates.Modified;
+      arr[i].state = ElementStates.Modified;
+      arr[index].state = ElementStates.Modified;
       setRandomArray([...arr]);
     }
 
@@ -110,28 +97,28 @@ export const SortingPage: React.FC = () => {
 
     for (let i = 0; i < length; i++) {
       for (let j = 0; j < length - i - 1; j++) {
-        arr[j].sorting = ElementStates.Changing;
-        arr[j + 1].sorting = ElementStates.Changing;
+        arr[j].state = ElementStates.Changing;
+        arr[j + 1].state = ElementStates.Changing;
         setRandomArray([...arr]);
 
         await delay(500);
 
         if (minSort) {
-          if (arr[j].num > arr[j + 1].num) {
+          if (arr[j].value > arr[j + 1].value) {
             swap(arr, j, j + 1);
             setRandomArray([...arr]);
           }
         } else if (maxSort) {
-          if (arr[j].num < arr[j + 1].num) {
+          if (arr[j].value < arr[j + 1].value) {
             swap(arr, j, j + 1);
             setRandomArray([...arr]);
           }
         }
-        arr[j].sorting = ElementStates.Default;
-        arr[j + 1].sorting = ElementStates.Default;
+        arr[j].state = ElementStates.Default;
+        arr[j + 1].state = ElementStates.Default;
         setRandomArray([...arr]);
       }
-      arr[length - i - 1].sorting = ElementStates.Modified;
+      arr[length - i - 1].state = ElementStates.Modified;
       setRandomArray([...arr]);
     }
   };
@@ -167,9 +154,9 @@ export const SortingPage: React.FC = () => {
   const columnElement = randomArray.map((num, i) => (
     <Column 
       key={i}
-      index={num.num}
+      index={num.value}
       extraClass={styles.column}
-      state={num.sorting === ElementStates.Default ? ElementStates.Default : num.sorting === ElementStates.Changing ? ElementStates.Changing : ElementStates.Modified}
+      state={num.state === ElementStates.Default ? ElementStates.Default : num.state === ElementStates.Changing ? ElementStates.Changing : ElementStates.Modified}
     />
   ));
 

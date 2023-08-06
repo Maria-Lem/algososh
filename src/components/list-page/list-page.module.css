@@ -3,5 +3,56 @@
   align-items: flex-start;
   justify-content: center;
   margin: 0 auto 48px;
-  max-width: 830px;
+  max-width: 960px;
+}
+
+.formContainer:last-child {
+  margin-bottom: 90px;
+}
+
+.button {
+  margin-right: 12px;
+}
+
+.button:last-child {
+  margin-right: 0;
+}
+
+.valueBtn {
+  min-width: 175px;
+  max-width: 175px;
+}
+
+.indexBtn {
+  min-width: 362px;
+  max-width: 362px;
+}
+
+.linkedListContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circleContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.arrowIcon {
+  margin: 0 16px;
+}
+
+.circleTop {
+  position: absolute;
+  top: -65px;
+  left: 13px;
+  padding: 0;
+}
+
+.circleBottom {
+  position: absolute;
+  top: 115px;
+  left: 13px;
 }

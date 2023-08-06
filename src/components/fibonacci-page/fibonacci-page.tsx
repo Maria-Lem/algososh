@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, { useState } from "react";
 
 import styles from './fibonacci-page.module.css';
 
@@ -7,8 +7,12 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+
+import { useForm } from "../../utils/hooks/useForm";
+
 export const FibonacciPage: React.FC = () => {
-  const [input, setInput] = useState('');
+  const { form, handleChange, setForm } = useForm({ input: '' });
   const [sequence, setSequence] = useState<number[]>([]);
   const [isLoader, setIsLoader] = useState(false);
 
@@ -29,15 +33,12 @@ export const FibonacciPage: React.FC = () => {
         }
 
         if (i === n) {
+          setForm({ ...form, input: '' });
           setIsLoader(false);
         }
-      }, i * 500);
+      }, i * SHORT_DELAY_IN_MS);
     }
     return arr;
-  };
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
   };
 
   const handleClick = () => {
@@ -45,11 +46,11 @@ export const FibonacciPage: React.FC = () => {
     setIsLoader(true);
 
     setTimeout(() => {
-      while (currentNumber <= Number(input)) {
-        fibonacciSequence(Number(input));
+      while (currentNumber <= Number(form.input)) {
+        fibonacciSequence(Number(form.input));
         currentNumber++;
       }
-    }, 500);
+    }, SHORT_DELAY_IN_MS);
   };
 
   const sequenceElement = sequence.map((num, i) => (
@@ -63,11 +64,18 @@ export const FibonacciPage: React.FC = () => {
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <form className={styles.formContainer}>
-        <Input type="number" isLimitText={true} max={19} onChange={handleChange} />
+        <Input 
+          type="number" 
+          isLimitText={true} 
+          max={19} 
+          onChange={handleChange} 
+          name="input"
+          value={form.input}
+        />
         <Button 
           text="Рассчитать" 
           onClick={handleClick} 
-          disabled={Number(input) === 0 || Number(input) > 19 || input.length === 0 ? true : false}
+          disabled={Number(form.input) === 0 || Number(form.input) > 19 || form.input.length === 0 ? true : false}
           isLoader={isLoader}
         />
       </form>
