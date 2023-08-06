@@ -262,7 +262,7 @@ export const ListPage: React.FC = () => {
   
   return (
     <SolutionLayout title="Связный список">
-      <form>
+      <div>
         <div className={styles.formContainer}>
           <Input 
             isLimitText={true}
@@ -322,7 +322,7 @@ export const ListPage: React.FC = () => {
             extraClass={`${styles.button} ${styles.indexBtn}`}
           />
         </div>
-      </form>
+      </div>
 
       <div className={styles.linkedListContainer}>
         { linkedListElement }

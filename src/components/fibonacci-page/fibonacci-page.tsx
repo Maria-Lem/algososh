@@ -63,7 +63,7 @@ export const FibonacciPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
-      <form className={styles.formContainer}>
+      <div className={styles.formContainer}>
         <Input 
           type="number" 
           isLimitText={true} 
@@ -78,7 +78,7 @@ export const FibonacciPage: React.FC = () => {
           disabled={Number(form.input) === 0 || Number(form.input) > 19 || form.input.length === 0 ? true : false}
           isLoader={isLoader}
         />
-      </form>
+      </div>
       <div className={styles.sequence}>
         { sequenceElement }
       </div>

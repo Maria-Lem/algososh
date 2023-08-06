@@ -83,7 +83,7 @@ export const StringComponent: React.FC = () => {
 
   return (
     <SolutionLayout title="Строка">
-      <form className={styles.inputContainer}>
+      <div className={styles.inputContainer}>
         <Input 
           isLimitText={true} 
           maxLength={11} 
@@ -92,7 +92,7 @@ export const StringComponent: React.FC = () => {
           onChange={handleChange} 
         />
         <Button text="Развернуть" onClick={handleClick} disabled={form.input.length === 0 ? true : false} isLoader={isLoader} />
-      </form>
+      </div>
       <div className={styles.letters}>
         { letterElement }
       </div>

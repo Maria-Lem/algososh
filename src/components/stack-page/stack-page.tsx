@@ -73,7 +73,7 @@ export const StackPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Стек">
-      <form className={styles.formContainer}>
+      <div className={styles.formContainer}>
         <Input 
           isLimitText={true}
           maxLength={4}
@@ -101,7 +101,7 @@ export const StackPage: React.FC = () => {
           disabled={stackArray.length === 0}
           isLoader={isLoader.isClearing}
         />
-      </form>
+      </div>
 
       <div className={styles.stackContainer}>
         { stackElement }

@@ -83,7 +83,7 @@ export const QueuePage: React.FC = () => {
 
   return (
     <SolutionLayout title="Очередь">
-      <form className={styles.formContainer}>
+      <div className={styles.formContainer}>
         <Input 
           isLimitText={true}
           maxLength={4}
@@ -110,7 +110,7 @@ export const QueuePage: React.FC = () => {
           onClick={clearQueue}
           isLoader={isLoader.isClearing}
         />
-      </form>
+      </div>
 
       <div className={styles.queueContainer}>
         { queueElement }
