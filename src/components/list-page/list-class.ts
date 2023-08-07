@@ -30,22 +30,27 @@ export class LinkedList<T> implements ILinkedList<T> {
 
   addToHead = (item: T) => {
     const node = new LinkedListNode(item);
-
-    if (this.head === null) {
-      this.head = node;
-      this.tail = this.head;
-      this.size++;
-
-      return this;
-    }
-
-    let curr = this.head;
-
+    node.next = this.head;
     this.head = node;
-    this.head.next = curr;
+
+    if (this.tail === null) {
+      this.tail = this.head;
+    }
+    // if (this.head === null) {
+    //   this.head = node;
+    //   this.tail = this.head;
+    //   this.size++;
+
+    //   return this;
+    // }
+
+    // let curr = this.head;
+
+    // this.head = node;
+    // this.head.next = curr;
 
     this.size++;
-    return this;
+    // return this;
   };
 
   addToTail = (item: T) => {
@@ -85,7 +90,6 @@ export class LinkedList<T> implements ILinkedList<T> {
     if (this.head === this.tail) {
       this.head = null;
       this.tail = null;
-      this.size--;
     }
 
     let currentNode = this.head;

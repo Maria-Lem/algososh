@@ -28,6 +28,9 @@ export const ListPage: React.FC = () => {
   const [smallCircle, setSmallCircle] = useState<string>('');
   const [isSmallCircleTop, setIsSmallCircleTop] = useState<boolean>(false);
   const [isSmallCircleBottom, setIsSmallCircleBottom] = useState<boolean>(false);
+  const [valueNotValid, setValueNotValid] = useState<boolean>(false);
+  const [indexNotValid, setIndexNotValid] = useState<boolean>(false);
+  const [isAddingToEmpty, setIsAddingToEmpty] = useState<boolean>(false);
   const [isLoader, setIsLoader] = useState<IIsLoader>({ 
     inputs: false,
     disableAll: false,
@@ -57,6 +60,7 @@ export const ListPage: React.FC = () => {
 
   // New linked list class
   const [list] = useState(new LinkedList<ILinkedListElement>(createInitialArray()));
+  console.log('list: ', list);
 
   // Setting initial array on first render
   useEffect(() => {
@@ -64,8 +68,42 @@ export const ListPage: React.FC = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Inputs validation
+    useEffect(() => {
+      setValueNotValid(form.inputValue.length === 0);
+
+      let index = Number(form.inputIndex);
+
+      if (form.inputIndex.length === 0 || index < 0 || index > list.getSize() - 1) {
+        setIndexNotValid(true);
+      } else {
+        setIndexNotValid(false);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [form.inputIndex, form.inputValue]);
+
+    // Setting if linked list is empty
+    useEffect(() => {
+      if (linkedListArray.length === 0) {
+        setIsAddingToEmpty(true)
+      } else {
+        setIsAddingToEmpty(false)
+      }
+    }, [linkedListArray]);
+
   // Adding to the head
   const handleAddToHead = async () => {
+    
+    if (linkedListArray.length === 0) {
+      setIsAddingToEmpty(true)
+      list.addToHead({
+        value: '',
+        state: ElementStates.Changing,
+        isSmallCircleTop: false,
+        isSmallCircleBottom: false,
+      });
+    } 
+
     list.getHead()!.value.isSmallCircleTop = true;
     setSmallCircle(form.inputValue);
     setIsSmallCircleTop(true);
@@ -75,13 +113,19 @@ export const ListPage: React.FC = () => {
     await delay(SHORT_DELAY_IN_MS);
     setSmallCircle('');
     setIsSmallCircleTop(false);
-    list.addToHead({
-      value: form.inputValue,
-      state: ElementStates.Changing,
-      isSmallCircleTop: false,
-      isSmallCircleBottom: false,
-    });
-    list.printArrayFromLinkedList()[1].isSmallCircleTop = false;
+
+    if (!isAddingToEmpty) {
+      list.addToHead({
+        value: form.inputValue,
+        state: ElementStates.Changing,
+        isSmallCircleTop: false,
+        isSmallCircleBottom: false,
+      });
+      list.printArrayFromLinkedList()[1].isSmallCircleTop = false;
+    } else if (isAddingToEmpty) {
+      list.printArrayFromLinkedList()[0].value = form.inputValue;
+      setIsAddingToEmpty(false);
+    }
     setLinkedListArray([...list.printArrayFromLinkedList()]);
 
     await delay(SHORT_DELAY_IN_MS);
@@ -93,6 +137,16 @@ export const ListPage: React.FC = () => {
 
   // Adding to the tail
   const handleAddToTail = async () => {
+    if (linkedListArray.length === 0) {
+      setIsAddingToEmpty(true)
+      list.addToTail({
+        value: '',
+        state: ElementStates.Changing,
+        isSmallCircleTop: false,
+        isSmallCircleBottom: false,
+      });
+    } 
+
     list.getTail()!.value.isSmallCircleTop = true;
     setSmallCircle(form.inputValue);
     setIsSmallCircleTop(true);
@@ -102,13 +156,19 @@ export const ListPage: React.FC = () => {
     await delay(SHORT_DELAY_IN_MS);
     setSmallCircle('');
     setIsSmallCircleTop(false);
-    list.addToTail({ 
-      value: form.inputValue, 
-      state: ElementStates.Modified,
-      isSmallCircleTop: false,
-      isSmallCircleBottom: false,
-    });
-    list.printArrayFromLinkedList()[list.getSize() - 2].isSmallCircleTop = false;
+    if (!isAddingToEmpty) {
+      list.addToTail({ 
+        value: form.inputValue, 
+        state: ElementStates.Modified,
+        isSmallCircleTop: false,
+        isSmallCircleBottom: false,
+      });
+      
+      list.printArrayFromLinkedList()[list.getSize() - 2].isSmallCircleTop = false;
+    } else if (isAddingToEmpty) {
+      list.printArrayFromLinkedList()[0].value = form.inputValue;
+      setIsAddingToEmpty(false);
+    }
     setLinkedListArray([...list.printArrayFromLinkedList()]);
 
     await delay(SHORT_DELAY_IN_MS);
@@ -271,53 +331,74 @@ export const ListPage: React.FC = () => {
             value={form.inputValue}
             onChange={handleChange}
             disabled={isLoader.inputs}
+            placeholder="Введите значение"
           />
           <Button 
             text="Добавить в head"
             onClick={handleAddToHead}
-            disabled={form.inputValue.length === 0 || (!isLoader.isAddingToHead && isLoader.disableAll)}
+            disabled={
+              valueNotValid || 
+              (!isLoader.isAddingToHead && isLoader.disableAll)
+            }
             isLoader={isLoader.isAddingToHead}
             extraClass={`${styles.button} ${styles.valueBtn}`}
           />
           <Button 
             text="Добавить в tail"
             onClick={handleAddToTail}
-            disabled={form.inputValue.length === 0 || (!isLoader.isAddingToTail && isLoader.disableAll)}
+            disabled={
+              valueNotValid || 
+              (!isLoader.isAddingToTail && isLoader.disableAll)
+            }
             isLoader={isLoader.isAddingToTail}
             extraClass={`${styles.button} ${styles.valueBtn}`}
           />
           <Button 
             text="Удалить из head"
             onClick={handleRemoveFromHead}
-            disabled={list.getSize() === 0 || (!isLoader.isRemovingFromHead && isLoader.disableAll)}
+            disabled={
+              list.getSize() === 0 || 
+              (!isLoader.isRemovingFromHead && isLoader.disableAll)
+            }
             isLoader={isLoader.isRemovingFromHead}
             extraClass={`${styles.button} ${styles.valueBtn}`}
           />
           <Button 
             text="Удалить из tail"
             onClick={handleRemoveFromTail}
-            disabled={list.getSize() === 0 || (!isLoader.isRemovingFromTail && isLoader.disableAll)}
+            disabled={
+              list.getSize() === 0 || 
+              (!isLoader.isRemovingFromTail && isLoader.disableAll)
+            }
             isLoader={isLoader.isRemovingFromTail}
             extraClass={`${styles.button} ${styles.valueBtn}`}
           />
         </div>
         <div className={styles.formContainer}>
           <Input 
+            type="number"
             name="inputIndex"
             value={form.inputIndex}
             onChange={handleChange}
+            placeholder="Введите индекс"
           />
           <Button 
             text="Добавить по индексу"
             onClick={handleInsertAtIndex}
-            disabled={(form.inputIndex.length === 0 || form.inputValue.length === 0) || (!isLoader.isInsertingByIndex && isLoader.disableAll)}
+            disabled={
+              (indexNotValid || valueNotValid) || 
+              (!isLoader.isInsertingByIndex && isLoader.disableAll)
+            }
             isLoader={isLoader.isInsertingByIndex}
             extraClass={`${styles.button} ${styles.indexBtn}`}
           />
           <Button 
             text="Удалить по индексу"
             onClick={handleRemoveByIndex}
-            disabled={form.inputIndex.length === 0 || list.getSize() === 0 || (!isLoader.isRemovingByIndex && isLoader.disableAll)}
+            disabled={
+              indexNotValid || list.getSize() === 0 || 
+              (!isLoader.isRemovingByIndex && isLoader.disableAll)
+            }
             isLoader={isLoader.isRemovingByIndex}
             extraClass={`${styles.button} ${styles.indexBtn}`}
           />

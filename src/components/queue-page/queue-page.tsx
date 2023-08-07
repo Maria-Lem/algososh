@@ -90,6 +90,7 @@ export const QueuePage: React.FC = () => {
           name="input"
           value={form.input}
           onChange={handleChange}
+          placeholder="Введите значение"
         />
         <Button 
           text="Добавить"

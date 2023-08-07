@@ -71,6 +71,7 @@ export const FibonacciPage: React.FC = () => {
           onChange={handleChange} 
           name="input"
           value={form.input}
+          placeholder="Введите значение"
         />
         <Button 
           text="Рассчитать" 
