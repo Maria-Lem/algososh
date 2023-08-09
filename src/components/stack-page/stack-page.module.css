@@ -1,0 +1,29 @@
+.formContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0 auto 48px;
+  max-width: 830px;
+}
+
+.addBtn {
+  margin-right: 12px;
+}
+
+.deleteBtn {
+  margin-right: 80px;
+}
+
+.stackContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stackElement {
+  margin-right: 16px;
+}
+
+.stackElement:last-child {
+  margin-right: 0;
+}

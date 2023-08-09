@@ -2,9 +2,10 @@ import React from "react";
 
 interface Props {
   fill?: string;
+  extraClass?: string;
 }
 
-export const ArrowIcon: React.FC<Props> = ({ fill = "#0032FF" }) => {
+export const ArrowIcon: React.FC<Props> = ({ fill = "#0032FF", extraClass="" }) => {
   return (
     <svg
       width="24"
@@ -12,6 +13,7 @@ export const ArrowIcon: React.FC<Props> = ({ fill = "#0032FF" }) => {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={extraClass}
     >
       <path
         fillRule="evenodd"
