@@ -60,7 +60,6 @@ export const ListPage: React.FC = () => {
 
   // New linked list class
   const [list] = useState(new LinkedList<ILinkedListElement>(createInitialArray()));
-  console.log('list: ', list);
 
   // Setting initial array on first render
   useEffect(() => {
