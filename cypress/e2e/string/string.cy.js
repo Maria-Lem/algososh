@@ -9,12 +9,15 @@ describe('String algorithm tests', () => {
 
   it('should check whether button is inactive when input is empty', () => {
     cy.get('input').should('have.value', '');
-    cy.get('button').should('be.disabled');
+    cy.get('button')
+      .contains('Развернуть')
+      .parent()
+      .should('be.disabled');
   });
 
   it('shoud test if the string is reversed correctly', () => {
     cy.get('input[type="text"]').as('input');
-    cy.get('button').contains('Развернуть').as('btn');
+    cy.get('button').contains('Развернуть').parent().as('btn');
     cy.clock();
 
     cy.get('@input').type('hello');

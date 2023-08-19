@@ -9,13 +9,16 @@ describe('Fibonacci sequence algorithm test', () => {
 
   it('should check whether button is inactive when input is empty', () => {
     cy.get('input[type="number"]').should('have.value', '');
-    cy.get('button').should('be.disabled');
+    cy.get('button')
+      .contains('Рассчитать')
+      .parent()
+      .should('be.disabled');
   });
 
   it('should check if the algorithm works correctly', () => {
     const value = 5;
     cy.get('input[type="number"]').as('input');
-    cy.get('button').contains('Рассчитать').as('btn');
+    cy.get('button').contains('Рассчитать').parent().as('btn');
     cy.clock();
 
     cy.get('@input').type(value);
