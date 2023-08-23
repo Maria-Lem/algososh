@@ -16,17 +16,10 @@ import { Queue } from "./queue-class";
 
 import { delay } from "../../utils/utils";
 import { useForm } from "../../utils/hooks/useForm";
-// import { useIsLoader } from "../../utils/hooks/useIsLoader";
 
 export const QueuePage: React.FC = () => {
   const [queue] = useState(new Queue<IQueueElement>(7));
   const { form, handleChange, setForm } = useForm({ input: '' });
-  // const { isLoader, handleIsLoader, setIsLoader } = useIsLoader({
-  //   isAdding: false, 
-  //   isDeleting: false,
-  //   isClearing: false,
-  // });
-  // console.log('isLoader: ', isLoader);
   const [queueArray, setQueueArray] = useState<IQueueElement[]>([]);
   const [isLoader, setIsLoader] = useState<IIsLoader>({ 
     isAdding: false, 
@@ -110,6 +103,7 @@ export const QueuePage: React.FC = () => {
           text="Очистить"
           onClick={clearQueue}
           isLoader={isLoader.isClearing}
+          disabled={queue.isEmpty()}
         />
       </div>
 
