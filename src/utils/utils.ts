@@ -2,7 +2,7 @@ import { IRandomArray, IResultArray } from "../types/main";
 
 export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const swap = (inputArray: IResultArray[] | IRandomArray[] | string[], firstIndex: number, secondIndex: number) => {
+export const swap = (inputArray: IResultArray[] | IRandomArray[] | string[] | number[], firstIndex: number, secondIndex: number) => {
   let temp = inputArray[firstIndex];
   inputArray[firstIndex] = inputArray[secondIndex];
   inputArray[secondIndex] = temp;
