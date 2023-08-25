@@ -1,5 +1,5 @@
 import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
-import { changingColor, defaultColor } from "../../utils/constants";
+import { changingColor, circle, circleContent, defaultColor } from "../../utils/constants";
 
 const addingValues = (array) => {
   for (let i = 0; i < array.length; i++) {
@@ -9,13 +9,13 @@ const addingValues = (array) => {
     cy.get('@btnAdd').should('not.be.disabled').click();
     cy.get('@head').eq(0).should('have.text', 'head');
     cy.get('@tail').eq(i).should('have.text', 'tail');
-    cy.get('@circle')
+    cy.get(circle)
       .eq(i)
       .should('have.text', array[i])
       .should('have.css', 'border-color', changingColor);
 
     cy.tick(SHORT_DELAY_IN_MS);
-    cy.get('@circle')
+    cy.get(circle)
       .eq(i)
       .should('have.text', array[i])
       .should('have.css', 'border-color', defaultColor);
@@ -27,8 +27,7 @@ const addingValues = (array) => {
 
 describe('Queue page tests', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
-    cy.get('a[href*="queue"]').click();
+    cy.visit('queue');
   });
 
   it('should check whether add btn is disabled when input is empty', () => {
@@ -42,9 +41,8 @@ describe('Queue page tests', () => {
   it('should check if adding new values work', () => {
     const testInputValues = [3, 7, 9, 12, 13];
     cy.get('button').contains('Добавить').parent().as('btnAdd');
-    cy.get('div[class*="circle_circle"]').as('circle');
-    cy.get('div[class*="circle_content"] div[class*="text"]:first-of-type').as('head');
-    cy.get('div[class*="circle_content"] div[class*="text"]:last-of-type').as('tail');
+    cy.get(`${circleContent} div[class*="text"]:first-of-type`).as('head');
+    cy.get(`${circleContent} div[class*="text"]:last-of-type`).as('tail');
     cy.clock();
 
     addingValues(testInputValues);
@@ -55,16 +53,15 @@ describe('Queue page tests', () => {
     cy.clock();
     cy.get('button').contains('Добавить').parent().as('btnAdd');
     cy.get('button').contains('Удалить').parent().as('btnDelete');
-    cy.get('div[class*="circle_circle"]').as('circle');
-    cy.get('div[class*="circle_content"] div[class*="text"]:first-of-type').as('head');
-    cy.get('div[class*="circle_content"] div[class*="text"]:last-of-type').as('tail');
+    cy.get(`${circleContent} div[class*="text"]:first-of-type`).as('head');
+    cy.get(`${circleContent} div[class*="text"]:last-of-type`).as('tail');
 
     addingValues(testInputValues);
     cy.get('@btnDelete').click();
-    cy.get('@circle').eq(0).should('have.css', 'border-color', changingColor);
+    cy.get(circle).eq(0).should('have.css', 'border-color', changingColor);
 
     cy.tick(SHORT_DELAY_IN_MS);
-    cy.get('@circle')
+    cy.get(circle)
       .eq(0)
       .should('have.css', 'border-color', defaultColor)
       .should('have.text', '');
@@ -78,9 +75,8 @@ describe('Queue page tests', () => {
     cy.get('button').contains('Добавить').parent().as('btnAdd');
     cy.get('button').contains('Удалить').parent().as('btnDelete');
     cy.get('button').contains('Очистить').parent().as('btnClear');
-    cy.get('div[class*="circle_circle"]').as('circle');
-    cy.get('div[class*="circle_content"] div[class*="text"]:first-of-type').as('head');
-    cy.get('div[class*="circle_content"] div[class*="text"]:last-of-type').as('tail');
+    cy.get(`${circleContent} div[class*="text"]:first-of-type`).as('head');
+    cy.get(`${circleContent} div[class*="text"]:last-of-type`).as('tail');
 
     addingValues(testInputValues);
     cy.get('@btnClear').click();

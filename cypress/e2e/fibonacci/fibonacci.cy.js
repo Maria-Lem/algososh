@@ -1,10 +1,9 @@
 import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
-import { defaultColor } from "../../utils/constants";
+import { circle, defaultColor } from "../../utils/constants";
 
 describe('Fibonacci sequence algorithm test', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
-    cy.get('a[href*="fibonacci"]').click();
+    cy.visit('fibonacci');
   });
 
   it('should check whether button is inactive when input is empty', () => {
@@ -26,39 +25,38 @@ describe('Fibonacci sequence algorithm test', () => {
     cy.get('@btn').should('not.be.disabled').click();
     
     cy.tick(550);
-    cy.get('div[class*="circle_circle"]').as('circle');
 
-    cy.get('@circle')
+    cy.get(circle)
       .eq(0)
       .should('have.text', 1)
       .should('have.css', 'border-color', defaultColor);
     cy.tick(SHORT_DELAY_IN_MS);
     
-    cy.get('@circle')
+    cy.get(circle)
       .eq(1)
       .should('have.text', 1)
       .should('have.css', 'border-color', defaultColor);
     cy.tick(SHORT_DELAY_IN_MS);
 
-    cy.get('@circle')
+    cy.get(circle)
       .eq(2)
       .should('have.text', 2)
       .should('have.css', 'border-color', defaultColor);
     cy.tick(SHORT_DELAY_IN_MS);
 
-    cy.get('@circle')
+    cy.get(circle)
       .eq(3)
       .should('have.text', 3)
       .should('have.css', 'border-color', defaultColor);
     cy.tick(SHORT_DELAY_IN_MS);
 
-    cy.get('@circle')
+    cy.get(circle)
       .eq(4)
       .should('have.text', 5)
       .should('have.css', 'border-color', defaultColor);
     cy.tick(SHORT_DELAY_IN_MS);
 
-    cy.get('@circle')
+    cy.get(circle)
       .eq(5)
       .should('have.text', 8)
       .should('have.css', 'border-color', defaultColor);

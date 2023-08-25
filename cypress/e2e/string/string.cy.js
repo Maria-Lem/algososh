@@ -1,10 +1,9 @@
-import { changingColor, defaultColor, modifiedColor } from "../../utils/constants";
+import { changingColor, circle, defaultColor, modifiedColor } from "../../utils/constants";
 import { DELAY_IN_MS } from '../../../src/constants/delays';
 
 describe('String algorithm tests', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
-    cy.get('a[href*="recursion"]').click();
+    cy.visit('recursion');
   });
 
   it('should check whether button is inactive when input is empty', () => {
@@ -25,40 +24,40 @@ describe('String algorithm tests', () => {
     cy.get('@btn').should('not.be.disabled').click();
     
     cy.tick(1100);
-    cy.get('div[class*="circle_circle"]').as('circle').should('have.length', 5);
+    cy.get(circle).should('have.length', 5);
     
-    cy.get('@circle').eq(0).should('have.css', 'border-color', changingColor);
-    cy.get('@circle').eq(1).should('have.css', 'border-color', defaultColor);
-    cy.get('@circle').eq(2).should('have.css', 'border-color', defaultColor);
-    cy.get('@circle').eq(3).should('have.css', 'border-color', defaultColor);
-    cy.get('@circle').eq(4).should('have.css', 'border-color', changingColor);
+    cy.get(circle).eq(0).should('have.css', 'border-color', changingColor);
+    cy.get(circle).eq(1).should('have.css', 'border-color', defaultColor);
+    cy.get(circle).eq(2).should('have.css', 'border-color', defaultColor);
+    cy.get(circle).eq(3).should('have.css', 'border-color', defaultColor);
+    cy.get(circle).eq(4).should('have.css', 'border-color', changingColor);
 
     cy.tick(DELAY_IN_MS);
-    cy.get('@circle')
+    cy.get(circle)
       .eq(0)
       .should('have.css', 'border-color', modifiedColor)
       .should('have.text', 'o');
-    cy.get('@circle').eq(1).should('have.css', 'border-color', changingColor);
-    cy.get('@circle').eq(2).should('have.css', 'border-color', defaultColor);
-    cy.get('@circle').eq(3).should('have.css', 'border-color', changingColor);
-    cy.get('@circle')
+    cy.get(circle).eq(1).should('have.css', 'border-color', changingColor);
+    cy.get(circle).eq(2).should('have.css', 'border-color', defaultColor);
+    cy.get(circle).eq(3).should('have.css', 'border-color', changingColor);
+    cy.get(circle)
       .eq(4)
       .should('have.css', 'border-color', modifiedColor)
       .should('have.text', 'h');
 
     cy.tick(DELAY_IN_MS);
-    cy.get('@circle')
+    cy.get(circle)
       .eq(1)
       .should('have.css', 'border-color', modifiedColor)
       .should('have.text', 'l');
-    cy.get('@circle').eq(2).should('have.css', 'border-color', changingColor);
-    cy.get('@circle')
+    cy.get(circle).eq(2).should('have.css', 'border-color', changingColor);
+    cy.get(circle)
       .eq(3)
       .should('have.css', 'border-color', modifiedColor)
       .should('have.text', 'e');
 
     cy.tick(DELAY_IN_MS);
-    cy.get('@circle')
+    cy.get(circle)
       .eq(2)
       .should('have.css', 'border-color', modifiedColor)
       .should('have.text', 'l');

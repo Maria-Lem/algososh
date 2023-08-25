@@ -1,20 +1,19 @@
 import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
-import { changingColor, defaultColor } from "../../utils/constants";
+import { changingColor, circle, defaultColor } from "../../utils/constants";
 
 const addingCircles = (array) => {
   for (let i = 0; i < array.length; i++) {
     cy.get('input').type(array[i]);
     cy.get('input').should('have.value', array[i]);
     cy.get('@btnAdd').should('not.be.disabled').click();
-    cy.get('div[class*="circle_circle"]').as('circle');
 
-    cy.get('@circle')
+    cy.get(circle)
       .eq(i)
       .should('have.text', array[i])
       .should('have.css', 'border-color', changingColor);
 
     cy.tick(SHORT_DELAY_IN_MS);
-    cy.get('@circle')
+    cy.get(circle)
       .eq(i)
       .should('have.text', array[i])
       .should('have.css', 'border-color', defaultColor);
@@ -22,12 +21,11 @@ const addingCircles = (array) => {
     cy.get('input').should('have.value', '');
     cy.get('@btnAdd').should('be.disabled');
   }
-}
+};
 
 describe('Stack page tests', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
-    cy.get('a[href*="stack"]').click();
+    cy.visit('stack');
   });
 
   it('shoud check whether add btn is disabled when input is empty', () => {
@@ -54,10 +52,9 @@ describe('Stack page tests', () => {
     addingCircles(testInputValues);
     
     cy.get('@btnDelete').click();
-    cy.get('div[class*="circle_circle"]').as('circle');
-    cy.get('@circle').eq(0).should('have.css', 'border-color', changingColor);
+    cy.get(circle).eq(0).should('have.css', 'border-color', changingColor);
     cy.tick(SHORT_DELAY_IN_MS);
-    cy.get('@circle').should('have.length', 0);
+    cy.get(circle).should('have.length', 0);
   });
 
   it('should check if all elements are deleted when clear button is clicked', () => {
@@ -69,7 +66,7 @@ describe('Stack page tests', () => {
 
     addingCircles(testInputValues);
     cy.get('@btnClear').click();
-    cy.get('div[class*="circle_circle"]').should('have.length', 0);
+    cy.get(circle).should('have.length', 0);
 
     cy.get('@btnAdd').should('be.disabled');
     cy.get('@btnDelete').should('be.disabled');
