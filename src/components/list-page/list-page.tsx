@@ -60,7 +60,6 @@ export const ListPage: React.FC = () => {
 
   // New linked list class
   const [list] = useState(new LinkedList<ILinkedListElement>(createInitialArray()));
-  console.log('list: ', list);
 
   // Setting initial array on first render
   useEffect(() => {
@@ -117,7 +116,7 @@ export const ListPage: React.FC = () => {
     if (!isAddingToEmpty) {
       list.addToHead({
         value: form.inputValue,
-        state: ElementStates.Changing,
+        state: ElementStates.Modified,
         isSmallCircleTop: false,
         isSmallCircleBottom: false,
       });
@@ -299,8 +298,8 @@ export const ListPage: React.FC = () => {
       <Circle 
         index={i}
         letter={listItem.value}
-        head={i === 0 ? 'head' : null}
-        tail={i === (list.getSize() - 1) ? 'tail' : null}
+        head={i === 0 && !isSmallCircleTop ? 'head' : null}
+        tail={i === (list.getSize() - 1) && !isSmallCircleBottom ? 'tail' : null}
         state={listItem.state === ElementStates.Default ? ElementStates.Default : listItem.state === ElementStates.Changing ? ElementStates.Changing : ElementStates.Modified}
       />
       {
